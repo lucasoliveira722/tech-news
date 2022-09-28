@@ -23,7 +23,7 @@ def fetch(url):
 # html_content é igual ao retorno da fetch, o q vai no Selector
 def scrape_novidades(html_content):
     selector = Selector(html_content)
-    news_links = selector.css('h2.entry-title a::attr(href)').getall()
+    news_links = selector.css('.entry-title a::attr(href)').getall()
     return news_links
 
 
