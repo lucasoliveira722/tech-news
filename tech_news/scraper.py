@@ -70,8 +70,10 @@ def scrape_noticia(html_content):
     # ).getall()[0]
     # summary_text = summary.strip()
 
+# seleciona todos os textos:
+# https://parsel.readthedocs.io/en/latest/usage.html#extensions-to-css-selectors
     summary = "".join(selector.css(
-        ".entry-content > p:nth-of-type(1) *::text"
+        ".entry-content > p:first-of-type *::text"
     ).getall()).strip()
 
 # foi
