@@ -36,7 +36,66 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+
+# foi
+    url = selector.css(
+        "link[rel=canonical]::attr(href)"
+    ).get()
+
+# foi
+    title = (selector.css(
+        ".entry-title::text"
+    ).get()).strip()
+
+# foi
+    timestamp = selector.css(
+        ".entry-header-inner .post-meta .meta-date::text"
+    ).get()
+
+# foi
+    writer = selector.css(
+        ".entry-header-inner .post-meta .meta-author .author a::text"
+    ).get()
+
+# foi
+    # https://www.geeksforgeeks.org/python-extract-numbers-from-string/
+    comments_count = selector.css(
+        ".post-comments h5::text"
+    ).getall()
+    comments_number = len(comments_count)
+
+    # summary = selector.css(
+    #     ".entry-content-wrap .entry-content p::text"
+    # ).getall()[0]
+    # summary_text = summary.strip()
+
+    summary = "".join(selector.css(
+        ".entry-content > p:nth-of-type(1) *::text"
+    ).getall()).strip()
+
+# foi
+    tags = selector.css(
+        ".entry-content-wrap .post-tags ul li a::text"
+    ).getall()
+
+# foi
+    category = selector.css(
+        ".label::text"
+    ).get()
+
+    noticia = {
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "comments_count": comments_number,
+        "summary": summary,
+        "tags": tags,
+        "category": category
+    }
+
+    return noticia
 
 
 # Requisito 5
