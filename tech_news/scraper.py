@@ -1,6 +1,7 @@
 import time
 import requests
 from parsel import Selector
+from tech_news.database import create_news
 # Requisito 1
 
 
@@ -72,6 +73,7 @@ def scrape_noticia(html_content):
 
 # seleciona todos os textos:
 # https://parsel.readthedocs.io/en/latest/usage.html#extensions-to-css-selectors
+# https://devhints.io/xpath
     summary = "".join(selector.css(
         ".entry-content > p:first-of-type *::text"
     ).getall()).strip()
@@ -102,4 +104,18 @@ def scrape_noticia(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    base_url = "https://blog.betrybe.com"
+    news_list = []
+
+    while (len(news_list) < amount):
+        url_info = fetch(base_url)
+        news_scraped_list = scrape_novidades(url_info)
+        for link in news_scraped_list:
+
+            each_new = scrape_noticia(fetch(link))
+            news_list.append(each_new)
+            if (len(news_list) == amount):
+                create_news(news_list)
+                return news_list
+
+        base_url = scrape_next_page_link(url_info)
